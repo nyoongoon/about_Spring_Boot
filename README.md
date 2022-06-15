@@ -90,3 +90,25 @@ persist() //엔티티를 영속성 컨텍스트에 저장.
 remove()
 flush()
 ```
+
+## 쿼리 메소드
+- find + (엔티티 이름(생략가능)) + By + 변수이름
+- 조건이 많아질 때 쿼리 메소드를 선언하면 이름이 정말 길어지기도 함. 복잦ㅂ한 쿼리를 다루기엔 부적합.
+<br/><br/><br/>
+
+# Repository
+- Data Access Object(DAO) 역할을 하는 인터페이스
+```java
+// JpaRepository<엔티티 클래스, 엔티티의 기본키 타입>
+public interface ItemRepository extends JpaRepository<Item, Long>{}
+```
+- 기본적인 CURD 및 페이징 처리를 위한 메소드가 정의돼 있음.
+```
+// 주로사용하는 JpaRepository 메소드
+<S extends T> save(S entity)
+void delete (T entity)
+count()
+Iterable<T> findAll()
+```
+- Spring Data JPA 는 인터페이스만 작성하면 런타임 시점에서 자바의 Dynamic Proxy를 이용해서 객체를 동적으로 생성해줌. 따로 DAO와 xml 파일에 쿼리문 작성하지 않아도 됨.
+
