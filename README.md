@@ -93,7 +93,50 @@ flush()
 
 ## 쿼리 메소드
 - find + (엔티티 이름(생략가능)) + By + 변수이름
-- 조건이 많아질 때 쿼리 메소드를 선언하면 이름이 정말 길어지기도 함. 복잦ㅂ한 쿼리를 다루기엔 부적합.
+- 조건이 많아질 때 쿼리 메소드를 선언하면 이름이 정말 길어지기도 함. 복잡한 쿼리를 다루기엔 부적합.
+
+## JPAQuery(JPQL) 
+### @Query
+- 쿼리메소드로 처리하기 힘든 복잡한 쿼리를 다룰 때 JPQL 사용
+- JPQL은 엔티티 객체를 대상으로 쿼리를 수행. 테이블이 아닌 객체를 대상으로 검색하는 객체지향 쿼리. 
+- JPQL은 SQL을 추상화해서 사용하기 때문에 특정 데이터베이스 SQL에 의존하지 않는다. 
+- 단점 : @Query 어노테이션 안에 JPQL문법으로 문자열을 입력하기 때문에 잘못 입력하면 컴파일 시점에 에러를 발견할 수 없음. -> Querydsl 사용
+
+### Querydsl
+- Querydsl은 JPQL 빌더 오픈소스 프레임워크.
+```
+장점
+1. 동적으로 쿼리 생성
+2. 쿼리 재사용, 제약 조건 조립 및 가독성 향상
+3. 컴파일 시점 오류 발견
+4. 자동완성 생산성 향상.
+```
+- querydsl-apt => 엔티티를 기반으로 Q가 붙는 클래스 자동생성 해주는 플러그인
+- 엔티티 위치가 변경되거나 삭제될 경우 기존 쿼리 타입(Q클래스)를 삭제해주어야 한다!
+- 참조)https://gaemi606.tistory.com/entry/Spring-Boot-Querydsl-%EC%B6%94%EA%B0%80-Gradle-7x
+
+### JPAQuery 메소드
+```
+//JPAQuery 데이터 반환 메소드
+List<T> fetch() //조회 결과 리스트 반환
+T fetchOne	//조회 대상이 1건인 경우 제네릭으로 지정한 타입 반환
+T fetchFirst()	//조회 대상 중 1건만 반환
+Long fetchCount()	//조회 대상 개수 반환
+QueryResult<T> fetchResults()	//조회한 리스트와 전체 개수를 포함한 QueryResults 반환
+```
+
+#### QuerydslPredicateExcutor
+- Predicate란 '이 조건이 맞다'라고 판단하는 근거를 함수로 제공하는 것.
+```
+// QuerydslPredicateExcutor 인터페이스 추상 메소드
+long count(Predicate)
+boolean exists(Predicate)
+Iterable findAll(Predicate)
+Page<T> findAll(Predicate, Pageable) // 조건에 맞는 페이지 데이터 반환. 
+Iterable findAll(Predicate, Sort)
+T findOne(Predicate)
+``` 
+- BooleanBuilder는 쿼리에 들어갈 조건을 만들어주는 빌더. Predicate를 구현하고 있으며 메소드 체인형식으로 사용 가능. 
 <br/><br/><br/>
 
 # Repository
