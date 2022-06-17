@@ -146,6 +146,9 @@ T findOne(Predicate)
 - BooleanBuilder는 쿼리에 들어갈 조건을 만들어주는 빌더. Predicate를 구현하고 있으며 메소드 체인형식으로 사용 가능. 
 <br/><br/><br/>
 
+
+
+
 # Repository
 - Data Access Object(DAO) 역할을 하는 인터페이스
 ```java
@@ -161,4 +164,26 @@ count()
 Iterable<T> findAll()
 ```
 - Spring Data JPA 는 인터페이스만 작성하면 런타임 시점에서 자바의 Dynamic Proxy를 이용해서 객체를 동적으로 생성해줌. 따로 DAO와 xml 파일에 쿼리문 작성하지 않아도 됨.
+<br/><br/><br/>
 
+
+
+# 스프링 시큐리티 
+## WebSecurityConfigurerAdapter
+- WebSecurityConfigurerAdapter를 상속받는 클래스에 @EnableWebSecurity 어노테이션을 선언하면 SpringSecurityFilterChain이 자동으로 포함됨. WebSecutiryConfigureAdapter를 상속받아서 메소드 오버라이딩을 통해 보안 설정을 커스터마이징 가능
+
+## HttpSecurity 
+- http 요청에 대한 보안 설정.
+- 페이지 권한 설정. 로그인 페이지 설정. 로그아웃 메소드 등에 대한 설정을 작성.
+
+## BCryptPasswordEncoder
+- 비밀번호를 위한 해시 메소드를 갖고 있음.
+
+# Service Layer
+## @Transactional
+- 비즈니스 로직을 담당하는 서비스 계층 클래스에 @Transactional 어노테이션을 선언합니다. 로직을 처리하다가 에러가 발생하였다면, 변경된 데이터를 로직을 수행하기 이전의 상태로 콜백시켜줍니다. 
+## @RequireArgsConstructor
+- 빈을 주입하는 방법은 @Autowired 어노테이션 이용하거나, 필드 주입, 생성자 주입 이용이 있는데,
+- @RequireArgsConstructor은 final이나 @NonNull이 붙은 필드에 생성자를 생성해줌. 
+- 빈에 생성자가 1개이고 생성자의 파라미터 타입이 빈으로 등록이 가능하다면 @Autowired 어노테이션 없이 의존성 주입이 가능. 
+<br/><br/><br/>
