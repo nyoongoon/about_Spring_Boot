@@ -170,6 +170,14 @@ Iterable<T> findAll()
 
 # 스프링 시큐리티 
 
+## AuthenticationManager
+- 스프링 시큐리티에서 인증은 AuthenticationManager을 통해 이루어지며, AuthenticationManagerBuilder가 AuthenticationManager를 생성함. userDetailService를 구현하고 있는 객체를 지정해주고, 비밀번호 암호화를 위해 passwordEncoder를 지정해주면 됨.
+```java
+protected void configure(AuthenticationManagerBuilder auth) throws Exception{
+        auth.userDetailsService(memberService).passwordEncoder(passwordEncoder());
+    }
+``` 
+
 ## CSRF(Cross Site Request Forgery)
 ```java
 <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
