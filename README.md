@@ -169,6 +169,32 @@ Iterable<T> findAll()
 
 
 # 스프링 시큐리티 
+
+## CSRF(Cross Site Request Forgery)
+```java
+<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+```
+- 스프링 시큐리티를 사용할 경우 기본적으로 CSRF를 방어하기 위해 모든 POST 방식의 데이터 전송에는 CSRF 토큰 값이 있어야함. CSRF토큰은 실제 서버에서 허용한 요청이 맞는지 확인하기 위한 토큰. 사용자의 세션에 임의의 값을 저장하여 요청마다 그 값을 포함하여 전송하면 서버에서 세션에 저장되 값과 요청이 온 값이 일치하는지 확인하여 CSRF를 방어 
+
+## spring-boot-validation
+- 유효한 값인지 판단하는 소스가 여러 군데 흩어지면 관리하기 힘듬. 자바 빈 밸리데이션을 이용하면 객체의 값을 효율적으로 검증 가능.
+``` 주요어노테이션
+@NotEmpty
+@NotBlank
+@Length
+@Email
+@Max
+@Min
+@Null
+@NotNull
+```
+
+```java
+public String memberForm(@Valid MemberFormDto memberFormDto, BindingResult bindingResult){
+	//검증하려는 객체의 앞에 @Valid 어노테이션을 선언하고, 파라미터로 bindingResult 객체를 추가. 검사 후 결과는 bindingResult에 담아줌. bindingResult.hasError()를 호출하여 에러가 있다면 회원가입 페이지로 이동. 
+}
+```
+
 ## WebSecurityConfigurerAdapter
 - WebSecurityConfigurerAdapter를 상속받는 클래스에 @EnableWebSecurity 어노테이션을 선언하면 SpringSecurityFilterChain이 자동으로 포함됨. WebSecutiryConfigureAdapter를 상속받아서 메소드 오버라이딩을 통해 보안 설정을 커스터마이징 가능
 
