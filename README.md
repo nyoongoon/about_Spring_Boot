@@ -214,6 +214,13 @@ public String memberForm(@Valid MemberFormDto memberFormDto, BindingResult bindi
 }
 ```
 
+
+## spring-security-test
+### MockMvc 테스트
+- @AutoConfigureMockMvc 어노테이션 선언
+- MockMvc 클래스를 이용해 실제 객체와 비슷하지만 테스트에 필요한 기능만 가지는 가짜 객체. MockMvc객체를 이용하면 웹브라우저에서 요청을 하는 것처럼 테스트할 수 있음.
+
+
 ## WebSecurityConfigurerAdapter
 - WebSecurityConfigurerAdapter를 상속받는 클래스에 @EnableWebSecurity 어노테이션을 선언하면 SpringSecurityFilterChain이 자동으로 포함됨. WebSecutiryConfigureAdapter를 상속받아서 메소드 오버라이딩을 통해 보안 설정을 커스터마이징 가능
 
