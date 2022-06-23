@@ -12,6 +12,9 @@
 
 # 어노테이션 
 
+## @Transactional
+- @Transactional(readOnly = true) -> 상품 데이터를 읽어오는 트랜잭션을 읽기 전용으로 설정. JPA가 더티체킹(변경감지)하지 않아 조회 성능 높힘.
+
 ## @RestController 
 - Restful Web API를 좀 더 쉽게 만들기 위한 기능.
 - @Controller와 @ResponseBody를 합쳐놓은 어노테이션. 
