@@ -52,6 +52,8 @@ cf) gradle implementation 'org.projectlombok:lombok'
 - 디비 설계를 외부에 노출할 필요도 없으며, 요청과 응답 객체가 항상 엔티티와 같지 않기 떄문.
 - 상품 등록 :  화면으로 전달 받은 DTO => 엔티티 객체로 변환 
 - 상품 조회 :  엔티티 객체 => DTO 객체 변환
+## modelmapper(라이브러리)
+- 서로 다른 클래스의 값을 필드의 이름과 자료형이 같으면 getter, setter를 통해 값을 복사해서 객체 반환.
 <br/><br/><br/>
 
 
