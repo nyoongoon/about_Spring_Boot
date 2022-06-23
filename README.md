@@ -50,6 +50,8 @@ cf) gradle implementation 'org.projectlombok:lombok'
 # DTO(Data Transfer Object)
 - **데이터를 주고 받을 때는 Entity 클래스 자체를 반환하면 안되고 데이터 전달용 객체(DTO)를 사용해야함 !!!**
 - 디비 설계를 외부에 노출할 필요도 없으며, 요청과 응답 객체가 항상 엔티티와 같지 않기 떄문.
+- 상품 등록 :  화면으로 전달 받은 DTO => 엔티티 객체로 변환 
+- 상품 조회 :  엔티티 객체 => DTO 객체 변환
 <br/><br/><br/>
 
 
