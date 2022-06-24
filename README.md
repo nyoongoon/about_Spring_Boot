@@ -48,6 +48,22 @@ cf) gradle implementation 'org.projectlombok:lombok'
 ```
 <br/><br/><br/>
 
+# Async(비동기)
+- 상품 주문에서 웹페이지의 새로고침 없이 서버에 주문을 요청하기 위함.
+
+```java
+//비동기 예시
+public @ResponseBody ResponseEntity order
+(@RequestBody @Valid OrderDto orderDto){
+...
+    return new ResponseEntity<Long>(orderId, HttpStatus.OK);   
+}
+```
+- 스프링에서 비동기 처리를 할 때 @RequestBody와 @ResponseBody 어노테이션을 사용함.
+- @Requestbody : HTTP 요청의 본문 body에 담긴 내용을 자바 객체로 전달.
+- @ResponseBody : 자바 객체를 HTTP 요청의 body로 전달
+- 결과값으로 생성된 주문번호와 요청이 성공했다는 HTTP 응답상태 코드 반환.
+<br/><br/><br/>
 
 # Configuration(스프링 설정 관련)
 ## WebMvcConfigurer(i)
