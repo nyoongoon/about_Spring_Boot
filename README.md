@@ -266,6 +266,9 @@ T fetchFirst() // 1건만 반환
 long fetchCount() // 전체 개수 반환 (count 쿼리)
 ```
 
+#### @QueryProjection
+- Querydsl 결과 조회 시 Dto 객체로 바로 받아볼 수 있음.
+- QDto 파일 생성되어 있어야함. 
 
 #### QuerydslPredicateExcutor
 - Predicate란 '이 조건이 맞다'라고 판단하는 근거를 함수로 제공하는 것.
