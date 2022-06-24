@@ -222,15 +222,50 @@ ALL
 - 엔티티 위치가 변경되거나 삭제될 경우 기존 쿼리 타입(Q클래스)를 삭제해주어야 한다!
 - 참조)https://gaemi606.tistory.com/entry/Spring-Boot-Querydsl-%EC%B6%94%EA%B0%80-Gradle-7x
 
-### JPAQuery 메소드
+- Querydsl을 Spring Data Jpa과 함께 사용하기 위해서는 사용자 정의 리포지토리를 정의해야함.
+```과정
+1. 사용자 정의 인터페이스 작성
+2. 사용자 정의 인터페이스 구현
+3. JpaRepository<>를 상속한 커스텀Repository에서 Querydsl 구현한 사용자 정의 인터페이스 함께 상속.
 ```
-//JPAQuery 데이터 반환 메소드
-List<T> fetch() //조회 결과 리스트 반환
-T fetchOne	//조회 대상이 1건인 경우 제네릭으로 지정한 타입 반환
-T fetchFirst()	//조회 대상 중 1건만 반환
-Long fetchCount()	//조회 대상 개수 반환
-QueryResult<T> fetchResults()	//조회한 리스트와 전체 개수를 포함한 QueryResults 반환
+- 사용자 정의 인터페이스 impl하는 클래스명 끝에 "Impl"붙여줘야 정상 작동
+- QueryDsl에서는 BooleanExpression이라는 where 절에서 사용할 수 있는 값을 지원.
+- BooleanExpression을 반환하는 메소드를 만들고 해당 조건들을 다른 쿼리를 생성할 때 사용할 수 있기 때문에 중복 코드를 줄일 수 있음.  => 결과값이 null이면 where절에서 해당 조건은 무시됨.
+
+```java
+public class ItemRepositoryCustomImpl implements ItemRepositoryCustom{
+    private JPAQueryFactory queryFactory; // 동적 쿼리 생성을 위한 팩토리 클래스
+
+    public ItemRepositoryCustomImpl(EntityManager em){
+        this.queryFactory = new JPAQueryFactory(em); // 생성자로 EntityManager를 넣어줌
+    }
+    ...
+    @Override
+    public Page<Item> getAdminItemPage(ItemSearchDto itemSearchDto, Pageable pageable) {
+        QueryResults<Item> results = queryFactory.selectFrom(QItem.item) //엔티티 지정
+                .where(regDtsAfter(itemSearchDto.getSearchDateType()), //where절엔 BooleanExpression 반환하는 조건문을 넣어줌. ","단위로 넣어줄 경우 and 조건으로 인식
+                        searchSellStatusEq(itemSearchDto.getSearchSellStatus()),
+                        searchByLike(itemSearchDto.getSearchBy(),
+                                itemSearchDto.getSearchQuery()))
+                .orderBy(QItem.item.id.desc())
+                .offset(pageable.getOffset()) //데이터를 가지고올 시작인덱스
+                .limit(pageable.getPageSize()) //한번에 가지고 올 최대 갯수
+                .fetchResults(); // 조회한 리스트 및 전체 개수 포함하는 QueryResults 반환 // 리스트 조회 및 전체 개수 조회하는 2번의 쿼리문이 실행됨
+        List<Item> content = results.getResults();
+        long total = results.getTotal();
+        return new PageImpl<>(content, pageable, total); //Page 클래스 구현체인 PageImpl 객체 반환.
+    }
+}
 ```
+```
+//Querydsl 조회 결과 반환 메소드
+QueryResults<T> fetchResults() //조회 대상 리스트 및 전체 개수 포함
+List<T> fetch() // 리스트 
+T fetchOne() // 조회 대산 1건이면 반환, 1건 이상이면 에러
+T fetchFirst() // 1건만 반환
+long fetchCount() // 전체 개수 반환 (count 쿼리)
+```
+
 
 #### QuerydslPredicateExcutor
 - Predicate란 '이 조건이 맞다'라고 판단하는 근거를 함수로 제공하는 것.
