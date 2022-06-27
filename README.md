@@ -63,6 +63,36 @@ public @ResponseBody ResponseEntity order
 - @Requestbody : HTTP 요청의 본문 body에 담긴 내용을 자바 객체로 전달.
 - @ResponseBody : 자바 객체를 HTTP 요청의 body로 전달
 - 결과값으로 생성된 주문번호와 요청이 성공했다는 HTTP 응답상태 코드 반환.
+- 
+### 비동기 프론트쪽 코드
+- 스프링 시큐리티를 사용할 경우 기본적으로 POST 방식의 데이터 전송에는 CSRF 토큰 값이 필요하므로 해당 값들을 조회.
+```javascript
+function order(){
+      var token = $("meta[name='_csrf']").attr("content"); //토큰 값 설정
+      var header = $("meta[name='_csrf_header']").attr("content");
+
+      // ... param
+
+      $.ajax({
+        url : url,
+        type : "POST",
+        contentType : "application/json",
+        data : param,
+        beforeSend : function (xhr){
+          /* 데이터를 전송하기 전에 헤더이 csrf 값을 설정 */
+          xhr.setRequestHeader(header, token); // <<== 토큰 값 전송
+        },
+        dataType : "json",
+        cache: false,
+        success: function(result, status){
+          
+        },
+        error : function (jqXHR, status, error){
+          
+        }
+      });
+    }
+```
 <br/><br/><br/>
 
 # Configuration(스프링 설정 관련)
