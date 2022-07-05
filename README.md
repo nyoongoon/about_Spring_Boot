@@ -328,6 +328,12 @@ Iterable findAll(Predicate, Sort)
 T findOne(Predicate)
 ``` 
 - BooleanBuilder는 쿼리에 들어갈 조건을 만들어주는 빌더. Predicate를 구현하고 있으며 메소드 체인형식으로 사용 가능. 
+
+
+## JPA N+1 문제
+- 연관 관계에서 발생하는 이슈로 연관 관계가 설정된 엔티티를 조회할 경우에 조회한 데이터 갯수(n)만큼 연관관계를 조회 쿼리가 추가로 발생하여 데이터를 읽어오게 된다. 이를 n+1문제라고 함.
+
+
 <br/><br/><br/>
 
 
