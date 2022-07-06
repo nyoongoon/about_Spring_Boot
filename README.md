@@ -15,6 +15,9 @@
 ## @Controller
 - 해당 클래스를 요청을 처리해주는 컨트롤러로 사용시킴
 
+## @DeleteMapping(value="/cartItem/{cartItemId}")
+- HTTP 메소드에서 DELETE의 경우 요청된 자원을 삭제할 때 사용.
+
 ## @GetMapping
 - 클라이언트의 요청을 처리할 URL을 매핑
 
