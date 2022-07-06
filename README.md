@@ -18,6 +18,9 @@
 ## @GetMapping
 - 클라이언트의 요청을 처리할 URL을 매핑
 
+## @Param
+- 매개변수의 네임을 통해 메서드의 매개 변수를 쿼리에 바인드 시키는 어노테이션
+
 ## @PatchMapping
 - HTTP메소드에서 PATCH는 요청된 자원의 일부만 업데이트할 때 PATCH 사용. 
 
