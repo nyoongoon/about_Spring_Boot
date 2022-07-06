@@ -374,6 +374,9 @@ protected void configure(AuthenticationManagerBuilder auth) throws Exception{
 ```
 - 스프링 시큐리티를 사용할 경우 기본적으로 CSRF를 방어하기 위해 모든 POST 방식의 데이터 전송에는 CSRF 토큰 값이 있어야함. CSRF토큰은 실제 서버에서 허용한 요청이 맞는지 확인하기 위한 토큰. 사용자의 세션에 임의의 값을 저장하여 요청마다 그 값을 포함하여 전송하면 서버에서 세션에 저장되 값과 요청이 온 값이 일치하는지 확인하여 CSRF를 방어 
 
+## Principal(i)
+- 엔티티를 유니크하게 식별할 때 구현하는 인터페이스
+- 스프링 시큐리티에서 사용될 때 users' identity를 식별하는 용도로 사용된다. 
 
 ## UserDetailService (i)
 - 이것을 구현하고 있는 클래스를 통해 로그인 기능 개발.
