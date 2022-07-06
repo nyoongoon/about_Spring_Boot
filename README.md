@@ -255,6 +255,16 @@ ALL
 - JPQL은 SQL을 추상화해서 사용하기 때문에 특정 데이터베이스 SQL에 의존하지 않는다. 
 - 단점 : @Query 어노테이션 안에 JPQL문법으로 문자열을 입력하기 때문에 잘못 입력하면 컴파일 시점에 에러를 발견할 수 없음. -> Querydsl 사용
 
+#### JPQL로 쿼리 작성 시 생성자 이용해서 DTO로 바로 반환
+```java
+@Query("select new com.shop.dto.CartDetailDto(ci.id, i.itemNm, i.price, ci.count, im.imgUrl) from ...")
+List<CartDetailDto> findCartDetailDtoList(Long cartId);
+```
+- CartDetailDto 리스트를 쿼리 하나로 조회하는 jpql문. 
+- 연관관계 매핑을 지연 로딩으로 설정할 경우 엔티티에 매핑된 다른 엔티티를 조회할 때 추가적으로 쿼리문이 실행됨. 따라서 성능 최적화가 필요한 경우 위와 같이 DTO의 생성자를 이용하여 반환값으로 DTO 객체 생성 가능.
+- CartDetailDto의 생성자를 이용하여 DTO를 반환할 때는 "new com.shop.dto.CartDetailDto(ci.id, i.itemNm, i.price, ci.count, im.imUrl)"처럼 new 키워드와 해당 DTO의 패키지, 클래스명을 적어줌. 또한 생성자의 파라미터 순서는 DTO 클래스에 명시한 순으로 넣어야함.
+
+
 ### Querydsl
 - Querydsl은 JPQL 빌더 오픈소스 프레임워크.
 ```
