@@ -129,6 +129,25 @@ public void addResourceHandlers(ResourceHandlerRegistry registry){
 
 
 
+# JAVA Class
+## Optional
+- java.util.Optional\<T\> 
+- 복잡한 조건문 없이 null 예외 처리 가능  
+- Optinal 객체를 사용하면 예상치 못한 ** NullPointerException ** 에외를 제공하는 메소드로 간단히 회피 가능.
+### Optional 객체의 생성
+- of() : Optional객체에 null저장되면 NullPointerException 예외 발생 !
+- ofNullable() : null이 저장되면 비어있는 Optional객체 반환 !
+### Opntional 객체에 접근
+- get() : null일 경우 NoSuchElementException 예외 발생 !
+- isPresent() : get() 전에 isPresent()를 호출하여 객체에 저장된 값이 null인지 확인하는 것이 좋다.
+### null 대신 대체할 값을 지정
+- orElse() : 저장된 값이 존재하면 그 값을 반환, 존재하지 않으면 인수로 전달된 값 반환
+- orElesGet() : 저장된 값이 존재하면 그 값을 반환, 존재하지 않으면 인수로 전달된 람다 표현식의 결괏값을 반환
+- orElesThrow() : 저장된 값이 존재하면 그 값을 반환, 존재하지 않으면 인수로 전달된 예외를 발생시킴. 
+<br/><br/><br/>
+
+
+
 # JPA
 ## 영속성 컨텍스트
 - 엔티티를 영구 저장하는 환경으로 엔티티 매니저를 통해 영속성 컨텍스트에 접근함. 
