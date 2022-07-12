@@ -375,7 +375,35 @@ T findOne(Predicate)
 <br/><br/><br/>
 
 
+# Paging In Spring
+- https://devlog-wjdrbs96.tistory.com/414
+- https://wonit.tistory.com/483
+- https://tecoble.techcourse.co.kr/post/2021-08-15-pageable/
 
+## Page(i)
+- org.springframework.data.domain.Page;
+- public interface Page\<T\> extends Slice\<T\>
+- 객체 리스트의 서브 리스트. 전체 리스트 정보를 포함하여 현재 객체의 위치 정보를 담고 있다.
+- JpaRepository -> Page\<T\> findAll(Pageable pageable) 
+- Page를 사용한다면 대부분 다수의 row를 가져오기 때문에 Page\<List\<T\>\>로 반환 
+
+
+## Pageable(i)
+- org.springframework.data.domain.Pageable 
+- JpaRepository -> Page\<T\> findAll(Pageable pageable) 
+- JpaRepository\<T\> 사용할 때 Pageable 타입의 변수를 넘겨주면 JPA가 DB에 접근해 자동으로 limit 조건을 붙여 데이터를 가져옴..
+
+## PageRequest(c)
+- org.springframework.data.domain.PageRequest
+- Basic Java Bean implementation of Pageable.
+- Controller API 메소드 파라미터에 Pageable 추가하면 PageRequest를 내부적으로 생성
+```java
+public static PageRequest of(int page, int size){
+    return of(page, size, Sort.unsorted());
+}
+```
+
+<br/><br/><br/>
 
 # Repository
 - Data Access Object(DAO) 역할을 하는 인터페이스
