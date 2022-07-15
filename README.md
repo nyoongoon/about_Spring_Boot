@@ -10,6 +10,26 @@
 
 
 
+# ApplicationRunner(i)
+- 스프링부트 애플리케이션이 만들어지고 실행됐을 때 자동으로 실행되는 Bean을 만들고 싶을 때 사용. 
+<br/><br/><br/>
+
+# @Bean (+ @Configuration)
+- @Bean은 개발자가 직접 제어가 불가능한 라이브러리를 사용할때나 초기설정을 하기 위해 사용됨. (외부 라이브러리 객체들을 빈으로 등록할 때)
+- @Bean은 Method에서 선언
+- 해당 클래스에 @Configuraion 선언해줘야함.
+<br/><br/><br/>
+# @Component
+- 개발자가 직접 개발한 클래스를 Bean으로 등록하고 싶을 때 사용.
+- @Component는 Type에서 선언
+- Streoypte(@Configuration, @Controller, @Servicie, @Repository)에 @Component.가 선언되어 있어 스프링 실행 시 ComponentScan을 통해 Bean으로 등록됨.
+<br/><br/><br/>
+# @Configuraion
+- 스프링에서 빈을 관리하는 설정 방식에는 XML과 JavaConfig 두가지 방식 존재.
+- JavaConfig에서 @Configuraion을 사용하게되면 스프링 설정을 담당하는 클래스가 됨.
+- 자바 클래스틑 @Configuraion을 사용하여 설정파일로 만들어주었으면 그안의 객체들을 빈으로 등록해야함.
+<br/><br/><br/>
+
 # 어노테이션 
 
 ## @Controller
@@ -421,6 +441,93 @@ Iterable<T> findAll()
 ```
 - Spring Data JPA 는 인터페이스만 작성하면 런타임 시점에서 자바의 Dynamic Proxy를 이용해서 객체를 동적으로 생성해줌. 따로 DAO와 xml 파일에 쿼리문 작성하지 않아도 됨.
 <br/><br/><br/>
+
+
+# @SpringBootAppliction
+- 메인 클래스에 붙어있는 @SpringBootApplication은 크게 3가지가 합쳐진 것
+```java
+@SpringBootConfiguration
+@ComponentScan
+@EnableAutoConfiguration
+```
+-  스프링부트 어플리케이션은 Bean을 2번 등록함. 처음에 ComponentScan으로 등록, 그 후에 EnableAutoConfiguration으로 추가적인 Bean들을 읽음.
+## @ComponentScan
+- 해당 패키지에서 @Component어노테이션을 가진 Bean들을 스캔해서 등록함.(@Configuration, @Repository,  @Service, @Controller, @RestController 포함)
+## @EnableAutoConfiguration 
+- AutoConfiguration은 결국 Configuration임. 즉, Bean을 등록하는 자바 설정 파일.
+- spring.factories내부에 여러 Configuraion들이 있고, 조건에 따라 Bean을 등록.
+- 따라서 메인 클래스(@SpringBootApplication)를 실행하면, @EnalbleAutoConfiguration에 의해 spring.factories안에 들어있는 수 많은 자동설정 들이 조건에 따라 적용되어 수 많은 Bean들이 생성되고, 스프링 부트 어플리케이션이 실행되는 것. 
+
+### ㄴ> 자동설정 구현하기
+#### 1. 의존성 추가
+```xml
+<dependencies>
+	<dependency>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-autoconfigure</artifactId>
+	</dependency>
+	<dependency>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-autoconfigure-processor</artifactId>
+		<optional>true</optional>
+	</dependency>
+</dependencies>
+
+<!-- 위에 추가해준 2개의 의존성 버전 관리를 하기 위함  -->
+<dependencyManagement>
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-dependencies</artifactId>
+			<version>2.0.3.RELEASE</version>
+			<type>pom</type>
+			<scope>import</scope>
+		</dependency>
+	</dependencies>
+</dependencyManagement>
+```
+#### 2. Configuration 파일 작성. 
+- 설정하는 대상이 되는 클래스는 다른 프로젝트에 있는 것이 흔함.
+- 다른 프로젝트에 있는 어떤 라이브러리에 대한 자동 설정파일을 또 다른 프로젝트에서 만드는 것이 보통. 
+
+#### 3. spring.factories 파일 생성
+- main - resources - META-INF - spring.factories
+- 다음 코드 추가.(만들어준 설정파일을 명시적으로 정의)
+```java
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  패키지이름.Configuration파일이름
+```
+- EnableAutoConfiguration이 켜져 있능 경우 설정파일 자동으로 읽어옴. 
+
+#### 4. 다른프로젝트에서 불러왔을 경우 새로운 설정으로 덮어씌우기.
+- 스프링부트2.1부터 Bean의 overriding 옵션이 false로 기본 설정 되어 있기 때문에, Bean을 덮어 씌우고 싶을 땐, overriding을 가능하게 하여, 처음 ComponentScan 때 Bean 등록 시 덮어씌워지게 할 수 있음. 
+- => 원본 Configuration 파일에 @ConditionalOnMissingBean을 추가. => 불려졌을 때 해당 프로젝트에서 설정 덮어씌기 가능해짐. 
+- => Bean의 내용을 바꾸고 싶을 때 이 과정은 너무 번거로움(원본 Configuration 수정하고, 불려진 프로젝트에서도 덮어씌워야함.)
+
+#### 5. application.properties로 타프로젝트에서 불러온 빈 간편하게 설정
+- main - resources - application.properties 파일 생성. 키, 값 지정. 
+- Properties에 해당하는 의존성 추가.(프로퍼티 자동완성 지원)
+```xml
+<dependency>
+	<groupId>org.springframework.boot</groupId>
+	<artifactId>spring-boot-configuration-processor</artifactId>
+	<optional>true</optional>
+</dependency>
+```
+- Properties 파일 생성, @ConfigurationProperties 어노테이션 선언, 사용할 prefix괄호안에 명시
+```java
+@ConfigurationProperties('prefix')_
+public class ExProperties{}
+```
+- 위의 properties 파일 사용하려면 Configuration 파일에 @EnableConfiguraionProperties선언. 괄호안에 property파일 설정
+```java
+@ConfigurationProperties
+@EnableConfiguraionProperties(SoloProperties.class)
+public class SoloConfiguraion{}
+```
+- => 이렇게 되면 원본에서 override 해서 Bean을 새로 만들필요 없이 application.properties에서 값만 바꿔주면 됨. 
+<br/><br/><br/>
+
 
 
 
